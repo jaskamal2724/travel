@@ -18,6 +18,11 @@ import {
 type ActionType = 'shipper' | 'receiver' | 'highway' | null;
 const FORM_SEQUENCE = ['shipper', 'receiver', 'highway'] as const;
 
+type FormData = {
+  [key: string]: {
+    [field: string]: string | undefined; 
+  };
+};
 
 
 export default function CreateTrip() {
@@ -25,7 +30,7 @@ export default function CreateTrip() {
   const [activeAction, setActiveAction] = useState<ActionType>("shipper")
   const [completedSections, setCompletedSections] = useState<ActionType[]>([])
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     shipper: {
       name: '',
       contactPerson: '',
@@ -90,9 +95,18 @@ export default function CreateTrip() {
     };
   
     const currentFormData = formData[activeAction];
-    return requiredFields[activeAction].every(field => 
-      currentFormData[field as keyof typeof currentFormData]?.trim() !== ''
-    );
+
+return requiredFields[activeAction].every((field) => {
+  const fieldValue = currentFormData[field as keyof typeof currentFormData];
+
+  // Type guard to check if the field is a string before calling trim
+  if (typeof fieldValue === 'string') {
+    return fieldValue.trim() !== '';
+  }
+
+  return false; // If the field is not a string, it's considered invalid
+});
+
   };
 
   const toggleAction = (action: ActionType) => {
