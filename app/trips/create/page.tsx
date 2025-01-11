@@ -18,7 +18,7 @@ import {
 type ActionType = 'shipper' | 'receiver' | 'highway' | null;
 
 export default function CreateTrip() {
-  const [step, setStep] = useState(1)
+  // const [step, setStep] = useState(1)
   const [currency, setCurrency] = useState('C$')
   const [activeAction, setActiveAction] = useState<ActionType>(null)
 
